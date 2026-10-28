@@ -4,7 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../core/utils/app_assets.dart';
 
 class SplashLogo extends StatelessWidget {
-  const SplashLogo();
+  const SplashLogo({super.key});
   @override
   Widget build(BuildContext context) {
     return SvgPicture.asset(AppAssets.logo, fit: BoxFit.contain);
