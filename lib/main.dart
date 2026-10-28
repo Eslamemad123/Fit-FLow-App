@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
+import 'features/splash/ui/views/splash_view.dart';
 
 void main() {
-  runApp(const MainApp());
+  runApp(const FitFlowApp());
 }
 
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+class FitFlowApp extends StatelessWidget {
+  const FitFlowApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: Scaffold(body: Center(child: Text('Hello World!'))),
+      debugShowCheckedModeBanner: false,
+      title: 'FitFlow',
+      home: SplashView(),
     );
   }
 }
