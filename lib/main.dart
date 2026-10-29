@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'features/splash/ui/views/splash_view.dart';
+import 'core/routes/routes.dart';
 
 void main() {
   runApp(const FitFlowApp());
@@ -10,10 +10,10 @@ class FitFlowApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: 'FitFlow',
-      home: SplashView(),
+      routerConfig: Routes.routes,
     );
   }
 }
