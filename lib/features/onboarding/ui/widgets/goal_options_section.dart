@@ -3,8 +3,20 @@ import 'package:flutter/material.dart';
 import '../../data/models/goal_option_model.dart';
 import 'goal_card.dart';
 
-class GoalOptionsSection extends StatelessWidget {
-  const GoalOptionsSection({super.key});
+class GoalOptionsSection extends StatefulWidget {
+  final ValueChanged<GoalOptionModel>? onGoalSelected;
+
+  const GoalOptionsSection({
+    super.key,
+    this.onGoalSelected,
+  });
+
+  @override
+  State<GoalOptionsSection> createState() => _GoalOptionsSectionState();
+}
+
+class _GoalOptionsSectionState extends State<GoalOptionsSection> {
+  int _selectedIndex = 1;
 
   static const List<GoalOptionModel> _goals = [
     GoalOptionModel(
@@ -24,15 +36,25 @@ class GoalOptionsSection extends StatelessWidget {
     ),
   ];
 
+  void _onGoalTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+    widget.onGoalSelected?.call(_goals[index]);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        GoalCard(goal: _goals[0], isSelected: false),
-        const SizedBox(height: 12),
-        GoalCard(goal: _goals[1], isSelected: true),
-        const SizedBox(height: 12),
-        GoalCard(goal: _goals[2], isSelected: false),
+        for (int i = 0; i < _goals.length; i++) ...[
+          if (i > 0) const SizedBox(height: 12),
+          GoalCard(
+            goal: _goals[i],
+            isSelected: _selectedIndex == i,
+            onTap: () => _onGoalTapped(i),
+          ),
+        ],
       ],
     );
   }

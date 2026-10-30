@@ -1,9 +1,19 @@
 import 'package:flutter/material.dart';
+
 import '../../../../core/theme/app_colors.dart';
 import 'availability_pill.dart';
 
 class WeeklyAvailabilitySelector extends StatelessWidget {
-  const WeeklyAvailabilitySelector({super.key});
+  final List<String> options;
+  final int selectedIndex;
+  final ValueChanged<int> onChanged;
+
+  const WeeklyAvailabilitySelector({
+    super.key,
+    required this.options,
+    required this.selectedIndex,
+    required this.onChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -16,32 +26,16 @@ class WeeklyAvailabilitySelector extends StatelessWidget {
           color: AppColors.cardBorder,
         ),
       ),
-      child: const Row(
+      child: Row(
         children: [
-          Expanded(
-            child: AvailabilityPill(
-              text: '2 Days',
-              isSelected: false,
+          for (int i = 0; i < options.length; i++)
+            Expanded(
+              child: AvailabilityPill(
+                text: options[i],
+                isSelected: selectedIndex == i,
+                onTap: () => onChanged(i),
+              ),
             ),
-          ),
-          Expanded(
-            child: AvailabilityPill(
-              text: '3 Days',
-              isSelected: true,
-            ),
-          ),
-          Expanded(
-            child: AvailabilityPill(
-              text: '4 Days',
-              isSelected: false,
-            ),
-          ),
-          Expanded(
-            child: AvailabilityPill(
-              text: '5+ Days',
-              isSelected: false,
-            ),
-          ),
         ],
       ),
     );

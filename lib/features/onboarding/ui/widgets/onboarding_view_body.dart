@@ -8,31 +8,46 @@ import 'onboarding_recommendation_card.dart';
 import 'onboarding_title_section.dart';
 import 'weekly_availability_section.dart';
 
-class OnboardingViewBody extends StatelessWidget {
+class OnboardingViewBody extends StatefulWidget {
   const OnboardingViewBody({super.key});
 
   @override
+  State<OnboardingViewBody> createState() => _OnboardingViewBodyState();
+}
+
+class _OnboardingViewBodyState extends State<OnboardingViewBody> {
+  String _selectedDays = '3 Days';
+
+  @override
   Widget build(BuildContext context) {
-    return const SingleChildScrollView(
-      physics: BouncingScrollPhysics(),
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+    return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          OnboardingHeader(),
-          SizedBox(height: 14),
-          OnboardingTitleSection(),
-          SizedBox(height: 20),
-          GoalOptionsSection(),
-          SizedBox(height: 20),
-          WeeklyAvailabilitySection(),
-          SizedBox(height: 20),
-          OnboardingRecommendationCard(),
-          SizedBox(height: 24),
-          OnboardingContinueButton(),
-          SizedBox(height: 14),
-          OnboardingFooterText(),
-          SizedBox(height: 12),
+          const OnboardingHeader(),
+          const SizedBox(height: 14),
+          const OnboardingTitleSection(),
+          const SizedBox(height: 20),
+          const GoalOptionsSection(),
+          const SizedBox(height: 20),
+          WeeklyAvailabilitySection(
+            onAvailabilityChanged: (days) {
+              setState(() {
+                _selectedDays = days;
+              });
+            },
+          ),
+          if (_selectedDays == '3 Days') ...[
+            const SizedBox(height: 20),
+            const OnboardingRecommendationCard(),
+          ],
+          const SizedBox(height: 24),
+          const OnboardingContinueButton(),
+          const SizedBox(height: 14),
+          const OnboardingFooterText(),
+          const SizedBox(height: 12),
         ],
       ),
     );
