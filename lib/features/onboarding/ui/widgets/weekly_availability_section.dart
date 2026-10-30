@@ -1,13 +1,15 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import 'weekly_availability_selector.dart';
 
 class WeeklyAvailabilitySection extends StatefulWidget {
-  final ValueChanged<String>? onAvailabilityChanged;
+  final ValueChanged<int>? onAvailabilityIndexChanged;
 
   const WeeklyAvailabilitySection({
     super.key,
-    this.onAvailabilityChanged,
+    this.onAvailabilityIndexChanged,
   });
 
   @override
@@ -17,32 +19,34 @@ class WeeklyAvailabilitySection extends StatefulWidget {
 class _WeeklyAvailabilitySectionState extends State<WeeklyAvailabilitySection> {
   int _selectedIndex = 1;
 
-  static const List<String> _options = [
-    '2 Days',
-    '3 Days',
-    '4 Days',
-    '5+ Days',
+  List<String> _getOptions() => [
+    LocaleKeys.days_2.tr(),
+    LocaleKeys.days_3.tr(),
+    LocaleKeys.days_4.tr(),
+    LocaleKeys.days_5_plus.tr(),
   ];
 
   void _onPillTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
-    widget.onAvailabilityChanged?.call(_options[index]);
+    widget.onAvailabilityIndexChanged?.call(index);
   }
 
   @override
   Widget build(BuildContext context) {
+    final options = _getOptions();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Weekly Availability',
+          LocaleKeys.weekly_availability.tr(),
           style: AppTextStyles.font16BoldDark,
         ),
         const SizedBox(height: 12),
         WeeklyAvailabilitySelector(
-          options: _options,
+          options: options,
           selectedIndex: _selectedIndex,
           onChanged: _onPillTapped,
         ),

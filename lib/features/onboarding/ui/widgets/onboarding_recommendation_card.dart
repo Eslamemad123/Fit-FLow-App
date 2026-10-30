@@ -1,4 +1,6 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/utils/app_assets.dart';
 
@@ -31,11 +33,11 @@ class OnboardingRecommendationCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'RECOMMENDED',
+                      LocaleKeys.recommended.tr(),
                       style: AppTextStyles.font11BoldPrimary,
                     ),
                     Text(
-                      'Optimal recovery cycle',
+                      LocaleKeys.optimal_recovery_cycle.tr(),
                       style: AppTextStyles.font11RegularGrey,
                     ),
                   ],

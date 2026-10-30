@@ -16,7 +16,7 @@ class OnboardingViewBody extends StatefulWidget {
 }
 
 class _OnboardingViewBodyState extends State<OnboardingViewBody> {
-  String _selectedDays = '3 Days';
+  int _selectedAvailabilityIndex = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -33,13 +33,13 @@ class _OnboardingViewBodyState extends State<OnboardingViewBody> {
           const GoalOptionsSection(),
           const SizedBox(height: 20),
           WeeklyAvailabilitySection(
-            onAvailabilityChanged: (days) {
+            onAvailabilityIndexChanged: (index) {
               setState(() {
-                _selectedDays = days;
+                _selectedAvailabilityIndex = index;
               });
             },
           ),
-          if (_selectedDays == '3 Days') ...[
+          if (_selectedAvailabilityIndex == 1) ...[
             const SizedBox(height: 20),
             const OnboardingRecommendationCard(),
           ],

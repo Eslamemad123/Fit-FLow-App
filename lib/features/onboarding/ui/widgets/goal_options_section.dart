@@ -1,5 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../core/localization/locale_keys.g.dart';
 import '../../data/models/goal_option_model.dart';
 import 'goal_card.dart';
 
@@ -15,41 +17,43 @@ class GoalOptionsSection extends StatefulWidget {
 class _GoalOptionsSectionState extends State<GoalOptionsSection> {
   int _selectedIndex = 1;
 
-  static const List<GoalOptionModel> _goals = [
+  List<GoalOptionModel> _getGoals() => [
     GoalOptionModel(
-      title: 'Build Muscle',
-      description: 'Focus on hypertrophy and strength.',
+      title: LocaleKeys.build_muscle_title.tr(),
+      description: LocaleKeys.build_muscle_desc.tr(),
       icon: Icons.open_in_full_rounded,
     ),
     GoalOptionModel(
-      title: 'Get Strong',
-      description: 'Prioritize heavy lifting.',
+      title: LocaleKeys.get_strong_title.tr(),
+      description: LocaleKeys.get_strong_desc.tr(),
       icon: Icons.fitness_center_rounded,
     ),
     GoalOptionModel(
-      title: 'General Fitness',
-      description: 'Balanced health and mobility.',
+      title: LocaleKeys.general_fitness_title.tr(),
+      description: LocaleKeys.general_fitness_desc.tr(),
       icon: Icons.directions_run_rounded,
     ),
   ];
 
-  void _onGoalTapped(int index) {
+  void _onGoalTapped(int index, List<GoalOptionModel> goals) {
     setState(() {
       _selectedIndex = index;
     });
-    widget.onGoalSelected?.call(_goals[index]);
+    widget.onGoalSelected?.call(goals[index]);
   }
 
   @override
   Widget build(BuildContext context) {
+    final goals = _getGoals();
+
     return Column(
       children: [
-        for (int i = 0; i < _goals.length; i++) ...[
+        for (int i = 0; i < goals.length; i++) ...[
           if (i > 0) const SizedBox(height: 12),
           GoalCard(
-            goal: _goals[i],
+            goal: goals[i],
             isSelected: _selectedIndex == i,
-            onTap: () => _onGoalTapped(i),
+            onTap: () => _onGoalTapped(i, goals),
           ),
         ],
       ],

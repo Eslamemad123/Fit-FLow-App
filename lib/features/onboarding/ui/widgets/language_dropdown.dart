@@ -1,19 +1,17 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../core/extensions/localization_extension.dart';
+import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../core/theme/app_colors.dart';
 
-class LanguageDropdown extends StatefulWidget {
+class LanguageDropdown extends StatelessWidget {
   const LanguageDropdown({super.key});
 
   @override
-  State<LanguageDropdown> createState() => _LanguageDropdownState();
-}
-
-class _LanguageDropdownState extends State<LanguageDropdown> {
-  String _selectedLanguage = 'English';
-
-  @override
   Widget build(BuildContext context) {
+    final currentLocale = context.isArabic ? 'ar' : 'en';
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
@@ -23,7 +21,7 @@ class _LanguageDropdownState extends State<LanguageDropdown> {
       ),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(
-          value: _selectedLanguage,
+          value: currentLocale,
           isDense: true,
           borderRadius: BorderRadius.circular(12),
           dropdownColor: AppColors.white,
@@ -32,21 +30,19 @@ class _LanguageDropdownState extends State<LanguageDropdown> {
             color: AppColors.textGrey,
             size: 18,
           ),
-          items: const [
+          items: [
             DropdownMenuItem(
-              value: 'English',
-              child: Text('English'),
+              value: 'en',
+              child: Text(LocaleKeys.language_en.tr()),
             ),
             DropdownMenuItem(
-              value: 'Arabic',
-              child: Text('Arabic'),
+              value: 'ar',
+              child: Text(LocaleKeys.language_ar.tr()),
             ),
           ],
           onChanged: (value) {
-            if (value != null) {
-              setState(() {
-                _selectedLanguage = value;
-              });
+            if (value != null && value != currentLocale) {
+              context.setLocale(Locale(value));
             }
           },
           style: const TextStyle(

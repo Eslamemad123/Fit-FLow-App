@@ -1,4 +1,6 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../core/theme/app_text_styles.dart';
 
 class OnboardingTitleSection extends StatelessWidget {
@@ -10,12 +12,12 @@ class OnboardingTitleSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Select Your Goal',
+          LocaleKeys.select_your_goal.tr(),
           style: AppTextStyles.font26BoldDark,
         ),
         const SizedBox(height: 8),
         Text(
-          'Customize your journey for precision performance.',
+          LocaleKeys.select_your_goal_subtitle.tr(),
           style: AppTextStyles.font14RegularGrey,
         ),
       ],
