@@ -6,10 +6,7 @@ import 'goal_card.dart';
 class GoalOptionsSection extends StatefulWidget {
   final ValueChanged<GoalOptionModel>? onGoalSelected;
 
-  const GoalOptionsSection({
-    super.key,
-    this.onGoalSelected,
-  });
+  const GoalOptionsSection({super.key, this.onGoalSelected});
 
   @override
   State<GoalOptionsSection> createState() => _GoalOptionsSectionState();
@@ -26,7 +23,7 @@ class _GoalOptionsSectionState extends State<GoalOptionsSection> {
     ),
     GoalOptionModel(
       title: 'Get Strong',
-      description: 'Prioritize heavy lifting and power.',
+      description: 'Prioritize heavy lifting.',
       icon: Icons.fitness_center_rounded,
     ),
     GoalOptionModel(
