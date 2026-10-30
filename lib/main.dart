@@ -13,6 +13,7 @@ class FitFlowApp extends StatelessWidget {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: 'FitFlow',
+      
       routerConfig: Routes.routes,
     );
   }
