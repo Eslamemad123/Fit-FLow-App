@@ -1,21 +1,25 @@
 import 'package:flutter/material.dart';
 
+import '../../data/models/goal_option_model.dart';
 import '../../data/models/onboarding_data_model.dart';
+import '../../data/models/onboarding_input_model.dart';
 import '../../data/repos/onboarding_repository.dart';
-import 'goal_options_section.dart';
+import 'onboarding_availability_section.dart';
 import 'onboarding_continue_button.dart';
 import 'onboarding_footer_text.dart';
+import 'onboarding_goal_section.dart';
 import 'onboarding_header.dart';
 import 'onboarding_recommendation_card.dart';
 import 'onboarding_title_section.dart';
-import 'weekly_availability_section.dart';
 
 class OnboardingViewBody extends StatefulWidget {
+  final OnboardingInputModel inputModel;
   final OnboardingRepository? repository;
   final ValueChanged<OnboardingDataModel>? onCompleted;
 
   const OnboardingViewBody({
     super.key,
+    required this.inputModel,
     this.repository,
     this.onCompleted,
   });
@@ -25,31 +29,32 @@ class OnboardingViewBody extends StatefulWidget {
 }
 
 class _OnboardingViewBodyState extends State<OnboardingViewBody> {
-  static const List<int> _availabilityDaysMap = [2, 3, 4, 5];
-
   late final OnboardingRepository _repository;
-  String _selectedGoalId = 'get_strong';
-  int _selectedAvailabilityIndex = 1;
+  List<GoalOptionModel> _goals = [];
   bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
     _repository = widget.repository ?? OnboardingRepository();
+    _loadGoals();
   }
 
-  int get _selectedAvailabilityDays =>
-      _availabilityDaysMap[_selectedAvailabilityIndex];
+  Future<void> _loadGoals() async {
+    final loaded = await _repository.getGoals();
+    if (mounted) {
+      setState(() {
+        _goals = loaded;
+      });
+    }
+  }
 
   Future<void> _handleContinue() async {
     setState(() {
       _isLoading = true;
     });
 
-    final onboardingData = OnboardingDataModel(
-      goalId: _selectedGoalId,
-      availabilityDays: _selectedAvailabilityDays,
-    );
+    final onboardingData = widget.inputModel.toDataModel();
 
     try {
       await _repository.saveOnboardingSelection(onboardingData);
@@ -76,24 +81,21 @@ class _OnboardingViewBodyState extends State<OnboardingViewBody> {
           const SizedBox(height: 14),
           const OnboardingTitleSection(),
           const SizedBox(height: 20),
-          GoalOptionsSection(
-            selectedGoalId: _selectedGoalId,
-            onGoalSelected: (goal) {
-              setState(() {
-                _selectedGoalId = goal.id;
-              });
+          OnboardingGoalSection(
+            inputModel: widget.inputModel,
+            goals: _goals.isNotEmpty ? _goals : null,
+            onGoalChanged: (goalId) {
+              setState(() {});
             },
           ),
           const SizedBox(height: 20),
-          WeeklyAvailabilitySection(
-            selectedIndex: _selectedAvailabilityIndex,
-            onAvailabilityIndexChanged: (index) {
-              setState(() {
-                _selectedAvailabilityIndex = index;
-              });
+          OnboardingAvailabilitySection(
+            inputModel: widget.inputModel,
+            onAvailabilityDaysChanged: (days) {
+              setState(() {});
             },
           ),
-          if (_selectedAvailabilityIndex == 1) ...[
+          if (widget.inputModel.availabilityDays == 3) ...[
             const SizedBox(height: 20),
             const OnboardingRecommendationCard(),
           ],

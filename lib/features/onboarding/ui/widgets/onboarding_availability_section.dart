@@ -3,17 +3,25 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../data/models/onboarding_input_model.dart';
 import 'weekly_availability_selector.dart';
 
-class WeeklyAvailabilitySection extends StatelessWidget {
-  final int selectedIndex;
-  final ValueChanged<int>? onAvailabilityIndexChanged;
+class OnboardingAvailabilitySection extends StatelessWidget {
+  static const List<int> _availabilityDaysMap = [2, 3, 4, 5];
 
-  const WeeklyAvailabilitySection({
+  final OnboardingInputModel inputModel;
+  final ValueChanged<int>? onAvailabilityDaysChanged;
+
+  const OnboardingAvailabilitySection({
     super.key,
-    this.selectedIndex = 1,
-    this.onAvailabilityIndexChanged,
+    required this.inputModel,
+    this.onAvailabilityDaysChanged,
   });
+
+  int get _selectedIndex {
+    final index = _availabilityDaysMap.indexOf(inputModel.availabilityDays);
+    return index != -1 ? index : 1;
+  }
 
   List<String> _getOptions() => [
     LocaleKeys.days_2.tr(),
@@ -36,10 +44,15 @@ class WeeklyAvailabilitySection extends StatelessWidget {
         const SizedBox(height: 12),
         WeeklyAvailabilitySelector(
           options: options,
-          selectedIndex: selectedIndex,
-          onChanged: (index) => onAvailabilityIndexChanged?.call(index),
+          selectedIndex: _selectedIndex,
+          onChanged: (index) {
+            final days = _availabilityDaysMap[index];
+            inputModel.updateAvailabilityDays(days);
+            onAvailabilityDaysChanged?.call(days);
+          },
         ),
       ],
     );
   }
 }
+

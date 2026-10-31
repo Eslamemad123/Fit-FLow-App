@@ -3,10 +3,13 @@ import 'package:flutter/services.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../data/models/onboarding_data_model.dart';
+import '../../data/models/onboarding_input_model.dart';
 import '../../data/repos/onboarding_repository.dart';
 import '../widgets/onboarding_view_body.dart';
 
-class OnboardingView extends StatelessWidget {
+export '../../data/models/onboarding_input_model.dart';
+
+class OnboardingView extends StatefulWidget {
   final OnboardingRepository? repository;
   final ValueChanged<OnboardingDataModel>? onCompleted;
 
@@ -15,6 +18,13 @@ class OnboardingView extends StatelessWidget {
     this.repository,
     this.onCompleted,
   });
+
+  @override
+  State<OnboardingView> createState() => _OnboardingViewState();
+}
+
+class _OnboardingViewState extends State<OnboardingView> {
+  final OnboardingInputModel _inputModel = OnboardingInputModel();
 
   @override
   Widget build(BuildContext context) {
@@ -28,8 +38,9 @@ class OnboardingView extends StatelessWidget {
         backgroundColor: AppColors.white,
         body: SafeArea(
           child: OnboardingViewBody(
-            repository: repository,
-            onCompleted: onCompleted,
+            inputModel: _inputModel,
+            repository: widget.repository,
+            onCompleted: widget.onCompleted,
           ),
         ),
       ),

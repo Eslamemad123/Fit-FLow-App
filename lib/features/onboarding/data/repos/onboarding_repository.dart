@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/services.dart';
+import '../models/goal_option_model.dart';
 import '../models/onboarding_data_model.dart';
 import '../models/workout_plan_model.dart';
 
@@ -8,6 +9,7 @@ class OnboardingRepository {
   final Future<String> Function(String path)? assetLoader;
 
   List<WorkoutPlanModel>? _cachedPlans;
+  List<GoalOptionModel>? _cachedGoals;
   OnboardingDataModel? _savedOnboardingData;
   WorkoutPlanModel? _selectedPlan;
 
@@ -16,8 +18,40 @@ class OnboardingRepository {
     this.assetLoader,
   });
 
+  List<GoalOptionModel>? get cachedGoals => _cachedGoals;
   OnboardingDataModel? get savedOnboardingData => _savedOnboardingData;
   WorkoutPlanModel? get selectedPlan => _selectedPlan;
+
+  Future<List<GoalOptionModel>> getGoals({String languageCode = 'en'}) async {
+    if (_cachedGoals != null) {
+      return _cachedGoals!;
+    }
+
+    final jsonString = assetLoader != null
+        ? await assetLoader!(assetPath)
+        : await rootBundle.loadString(assetPath);
+
+    final Map<String, dynamic> data =
+        jsonDecode(jsonString) as Map<String, dynamic>;
+    final goalsJson = data['goals'] as List<dynamic>? ?? [];
+
+    _cachedGoals = goalsJson
+        .map((e) => GoalOptionModel.fromJson(
+              e as Map<String, dynamic>,
+              languageCode: languageCode,
+            ))
+        .toList();
+
+    const displayOrder = ['build_muscle', 'get_strong', 'general_fitness'];
+    _cachedGoals!.sort((a, b) {
+      final indexA = displayOrder.indexOf(a.id);
+      final indexB = displayOrder.indexOf(b.id);
+      if (indexA != -1 && indexB != -1) return indexA.compareTo(indexB);
+      return 0;
+    });
+
+    return _cachedGoals!;
+  }
 
   Future<List<WorkoutPlanModel>> getPlans() async {
     if (_cachedPlans != null) {
@@ -60,4 +94,3 @@ class OnboardingRepository {
     return _selectedPlan;
   }
 }
-
